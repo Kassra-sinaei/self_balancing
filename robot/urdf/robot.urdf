@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="robot">
+  <link
+    name="Body">
+    <inertial>
+      <origin
+        xyz="2.9281E-18 2.1948E-18 0.073211"
+        rpy="0 0 0" />
+      <mass
+        value="0.1421" />
+      <inertia
+        ixx="0.00032211"
+        ixy="-2.6457E-20"
+        ixz="5.0212E-21"
+        iyy="0.00040423"
+        iyz="-9.1616E-21"
+        izz="0.00016047" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/Body.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/Body.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="left_wheel">
+    <inertial>
+      <origin
+        xyz="0.022019 0 1.7347E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.013464" />
+      <inertia
+        ixx="4.0473E-06"
+        ixy="-1.8323E-22"
+        ixz="4.6979E-22"
+        iyy="2.1457E-06"
+        iyz="-1.0588E-22"
+        izz="2.1457E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/left_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.29804 0.29804 0.29804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/left_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_joint"
+    type="revolute">
+    <origin xyz="-0.035 0.0125 0" rpy="1.0038 0 -3.1416" />
+    <parent link="Body" />
+    <child link="left_wheel" />
+    <axis xyz="-1 0 0" />
+    <limit effort="1000.0" lower="-3.1415" upper="3.1415" velocity="1.0"/>
+  </joint>
+  <link
+    name="right_wheel">
+    <inertial>
+      <origin
+        xyz="0.022019 8.6736E-19 1.7347E-18"
+        rpy="0 0 0" />
+      <mass
+        value="0.013464" />
+      <inertia
+        ixx="4.0473E-06"
+        ixy="-1.3548E-23"
+        ixz="2.2109E-22"
+        iyy="2.1457E-06"
+        iyz="-2.1176E-22"
+        izz="2.1457E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/right_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.29804 0.29804 0.29804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://robot/meshes/right_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_joint"
+    type="revolute">
+    <origin xyz="0.035 0.0125 0" rpy="1.8984 0 0" />
+    <parent link="Body" />
+    <child link="right_wheel" />
+    <axis xyz="-1 0 0" />
+    <limit effort="1000.0" lower="-3.1415" upper="3.1415" velocity="1.0"/>
+  </joint>
+
+  <gazebo reference="Body">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/Orange</material>
+      
+      <gravity>true</gravity>
+
+      <sensor name="imu_sensor" type="imu">
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <visualize>true</visualize>
+        <topic>imu</topic>
+        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+          <topicName>imu</topicName>
+          <bodyName>Body</bodyName>
+          <updateRateHZ>0.5</updateRateHZ>
+          <gaussianNoise>0.0</gaussianNoise>
+          <xyzOffset>0 0 0</xyzOffset>
+          <rpyOffset>0 0 0</rpyOffset>
+          <frameName>Body</frameName>
+          <initialOrientationAsReference>false</initialOrientationAsReference>
+        </plugin>
+        <pose>0 0 0 0 0 0</pose>
+      </sensor>
+
+  </gazebo>
+
+  <gazebo>
+    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+        <legacyMode>false</legacyMode>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>10</updateRate>
+        <leftJoint>left_joint</leftJoint>
+        <rightJoint>right_joint</rightJoint>
+        <wheelSeparation>0.4</wheelSeparation>
+        <wheelDiameter>0.2</wheelDiameter>
+        <torque>10</torque>
+        <commandTopic>cmd_vel</commandTopic>
+        <odometryTopic>odom</odometryTopic>
+        <odometryFrame>odom</odometryFrame>
+        <robotBaseFrame>Body</robotBaseFrame>
+      </plugin>
+  </gazebo>
+  <gazebo reference="right_wheel">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="left_wheel">
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+      <material>Gazebo/Black</material>
+  </gazebo>
+</robot>
